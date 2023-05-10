@@ -239,10 +239,10 @@ def main():
     # receptorpath = '/Volumes/data/home/Developer/workspace/centling/code/deep/ledock/Mpro/Mpro'
 
     # TODO 正式地址 高研院
-    receptorpath = '/lustre/home/weizhiqiang/dev/zyd/20210420/Mpro'
+    receptorpath = '/lustre/home/XXXXXX/dev/zyd/20210420/Mpro'
 
     # TODO 正式地址 即墨超算
-    # receptorpath = '/home/csywz/deep/Mpro'
+    # receptorpath = '/home/XXXX/deep/Mpro'
 
     logging.info('受体文件目录：' + receptorpath)
 
