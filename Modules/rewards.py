@@ -94,24 +94,12 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
                 mw = MolDescriptors.CalcExactMolWt(mol)
                 tpsa = Descriptors.TPSA(mol)
                 # # 计算相似性
-                # # 计算相似性
-                # m1 = Chem.MolFromMol2File('/home/developer/wq/3.6/sdy-14.mol2')
-                # m2 = Chem.MolFromMol2File('/home/developer/wq/3.6/sdy-95.mol2')
-                # ms = [m1, m2, Chem.Mol(mol)]
-                # fps = [Chem.RDKFingerprint(x) for x in ms]
-                # sim1 = DataStructs.FingerprintSimilarity(fps[0], fps[2])
-                # sim2 = DataStructs.FingerprintSimilarity(fps[1], fps[2])
-                # if(sim1 >= 0.8) or (sim2 >= 0.8):
-                #     print("target molecule is {},sim1 is{},sim2 is {}".format(str(Chem.MolToSmiles(mol))),sim1,sim2)
                 frs[i][0] = True
                 frs[i][1]=400 < mw < 605
                 frs[i][2]=4 < clogp < 7
                 frs[i][3]=80 < tpsa < 102
                 print("mw:{},clogP:{},tpsa:{}".format(mw,clogp,tpsa))
-                # os.system("obabel -ismiles /home/b519/lyy/lyy2/deep/ligand/temp.smi -omol2 -O /home/b519/lyy/lyy2/deep/ledock/ligand/temp.mol2 --gen3D")
-                # print("*****************************")
-                # mymol = readstring("smi", smi)
-                # mymol.write("smi", path+str(i)+".smi",overwrite=True)
+               
                 # os.system("obabel -ismiles "+path+str(i)+".smi -omol2 -O "+path+str(i)+".mol2 --gen3D")
                 print('obabel -:"' + Smiles + '" --gen3d -omol2 -O ' + path + str(i) + '.mol2')
                 os.system('obabel -:"' + Smiles + '" --gen3d -omol2 -O ' + path + str(i) + '.mol2')
@@ -126,22 +114,13 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
         else:
             frs[i] = [False] * FEATURES
 
-    # print("rewards1:")
+    
     # print(frs)
     # 调用对接接口
     if len(mollist) == 0:
         # print('len(mollist) == 0'+str(len(evaluated_mols)))
         return frs
-    #result_list_str = Client(filename)
-    # result_list_str = sftpClient(
-    #    _ligandListFilePath=filename,
-    #    _remotepath='/lustre/home/weizhiqiang/',
-    #    _hostname='10.130.2.222',
-    #    _username='weizhiqiang',
-    #    _passwd='IAOS1234'
-    # )
-    # print(result_list_str)ss
-    # print(type(result_list_str))
+   
     # 获取对接结果，拼接成模型输入
     # 将获得的结果转换成字典
     # 死循环，只有当try到正确结果时，才会退出循环，否则将等待6s后重新执行，同时将这次的中断输出到日志
@@ -179,9 +158,7 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
     # result_list = result_list_str.strip('[]').split('], [')
     # TDO 容错机制，若没有结果，则继续检测
     # del(result_list[-1])#删除掉最后的空格元素
-    # print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    # print(len(result_list))
-    # print(result_list)
+  
     result_key_value = {}
     # print("---------------------------------------")
     for result in result_list:
@@ -195,10 +172,7 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
         # print("key="+key)
         value = [float(strs[2]), float(strs[3]), float(strs[4])]
         result_key_value[key] = value
-        # print("key")
-        # print(key)
-        # print("value")
-        # print(value)
+      
     ##拼接结果为感知机的输入
     PDBpath = rootPath + '/ledock/Mpro/Mpro/ledock_in.list'
     print(len(result_key_value))
@@ -218,13 +192,7 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
                 X.append(val[0])
                 X.append(val[1])
                 X.append(val[2])
-                # print(len(X))
-            # print("i:"+str(i))
-            # print(X)
-        # 预测activity
-        # print(len(X))
-        # print(len(W))
-        # print(len(b[0]))
+         
         print("activity:"+str(np.dot(X, W) + b[0]))
         activity =((np.dot(X, W) + b[0]) > 0)
         frs[i][4] = activity
@@ -237,34 +205,6 @@ def evaluate_batch_mol(org_mols, batch_mol, epoch, decodings):
     # print("final_frs")
     # print(frs)
     return frs
-
-
-'''
-#**# Same as above but decodes and check if a cached value could be used.
-def evaluate_mol(fs, epoch, decodings):
-
-    #print("This is evaluate_mol.....")
-
-    global evaluated_mols
-
-    key = get_key(fs)
-
-    if key in evaluated_mols:
-        return evaluated_mols[key][0]
-
-    try:
-        mol = decode(fs, decodings)
-        ret_val = evaluate_chem_mol(mol)
-    except:
-        ret_val = [False] * 5
-
-    evaluated_mols[key] = (np.array(ret_val), epoch)
-
-    return np.array(ret_val)
-'''
-
-
-
 
 # Get initial distribution of rewards among lead molecules
 def get_init_dist( X, decodings):
