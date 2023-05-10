@@ -313,19 +313,19 @@ def main(ligandListFilePath):
     # 高研院
     sftpClient(
         _ligandListFilePath=ligandListFilePath,
-        _remotepath='/lustre/home/weizhiqiang/',
-        _hostname='10.130.2.222',
-        _username='weizhiqiang',
-        _passwd='IAOS1234'
+        _remotepath='/lustre/home/XXXXXX/',
+        _hostname='10.130.X.XXX',
+        _username='XXXXXX',
+        _passwd='XXXXX'
     )
 
     # 即墨超算
     # sftpClient(
     #     _ligandListFilePath=ligandListFilePath,
     #     _remotepath='/home/csywz/',
-    #     _hostname='11.11.100.10',
-    #     _username='csywz',
-    #     _passwd='csywz@20131218'
+    #     _hostname='11.11.XXX.XX',
+    #     _username='XXXX',
+    #     _passwd='XXXXX'
     # )
 
     # sftpClient(
